@@ -33,6 +33,7 @@ fillNeighborhoodsHTML = (neighborhoods = self.neighborhoods) => {
   const select = document.getElementById('neighborhoods-select');
   neighborhoods.forEach(neighborhood => {
     const option = document.createElement('option');
+    option.setAttribute('role', 'option');
     option.innerHTML = neighborhood;
     option.value = neighborhood;
     select.append(option);
@@ -61,6 +62,7 @@ fillCuisinesHTML = (cuisines = self.cuisines) => {
 
   cuisines.forEach(cuisine => {
     const option = document.createElement('option');
+    option.setAttribute('role', 'option');
     option.innerHTML = cuisine;
     option.value = cuisine;
     select.append(option);
