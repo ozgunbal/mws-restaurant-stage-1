@@ -1,6 +1,25 @@
 let restaurant;
 var map;
 
+document.addEventListener('DOMContentLoaded', (event) => {
+  offlineLoad();
+});
+
+/**
+ * Loads the content when offline
+ */
+offlineLoad = () => {
+  if (!navigator.onLine) {
+    fetchRestaurantFromURL((error, restaurant) => {
+      if (error) { // Got an error!
+        console.error(error);
+      } else {
+        fillBreadcrumb();
+      }
+    });
+  }  
+}
+
 /**
  * Initialize Google map, called from HTML.
  */
