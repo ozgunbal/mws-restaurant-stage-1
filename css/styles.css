@@ -66,6 +66,7 @@ nav h1 a {
   text-transform: uppercase;
 }
 #breadcrumb {
+  height: auto;
   padding: 10px 40px 16px;
   list-style: none;
   background-color: #eee;
@@ -74,6 +75,13 @@ nav h1 a {
   width: calc(50% - 80px);
   position: fixed;
   top: 80px;
+  text-align: left;
+}
+
+nav#breadcrumb ol {
+margin: 0;
+padding-left: 0;
+list-style: none;
 }
 
 /* Display list items side by side */
