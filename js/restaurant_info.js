@@ -17,7 +17,17 @@ offlineLoad = () => {
         fillBreadcrumb();
       }
     });
-  }  
+  }
+}
+
+/**
+ * Renders DOM Element with given properties and attributes
+ */
+function renderElement({ type, props = {}, attributes = {} }) {
+  const element = document.createElement(type);
+  Object.keys(props).forEach(key => element[key] = props[key]);
+  Object.keys(attributes).forEach(key => element.setAttribute(key, attributes[key]));
+  return element;
 }
 
 /**
@@ -96,14 +106,19 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
 fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => {
   const hours = document.getElementById('restaurant-hours');
   for (let key in operatingHours) {
-    const row = document.createElement('tr');
+    const row = renderElement({ type: 'tr' })
+    //const row = document.createElement('tr');
 
-    const day = document.createElement('td');
-    day.innerHTML = key;
+    const day = renderElement({
+      type: 'td',
+      props: { innerHTML: key }
+    });
     row.appendChild(day);
 
-    const time = document.createElement('td');
-    time.innerHTML = operatingHours[key];
+    const time = renderElement({
+      type: 'td',
+      props: { innerHTML: operatingHours[key] }
+    });
     row.appendChild(time);
 
     hours.appendChild(row);
@@ -115,13 +130,17 @@ fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => 
  */
 fillReviewsHTML = (reviews = self.restaurant.reviews) => {
   const container = document.getElementById('reviews-container');
-  const title = document.createElement('h2');
-  title.innerHTML = 'Reviews';
+  const title = renderElement({
+    type: 'h2',
+    props: { innerHTML: 'Reviews' }
+  });
   container.appendChild(title);
 
   if (!reviews) {
-    const noReviews = document.createElement('p');
-    noReviews.innerHTML = 'No reviews yet!';
+    const noReviews = renderElement({
+      type: 'p',
+      props: { innerHTML: 'No reviews yet!' }
+    });
     container.appendChild(noReviews);
     return;
   }
@@ -136,34 +155,63 @@ fillReviewsHTML = (reviews = self.restaurant.reviews) => {
  * Create review HTML and add it to the webpage.
  */
 createReviewHTML = (review) => {
-  const li = document.createElement('li');
-  const reviewTop = document.createElement('div');
-  reviewTop.className = "reviewer-top";
-  const reviewBottom = document.createElement('div');
-  reviewBottom.className = "reviewer-bottom";
+  const li = renderElement({ type: 'li' });
 
-  const name = document.createElement('p');
-  name.className = "reviewer-name";
-  name.innerHTML = review.name;
-  reviewTop.appendChild(name);
+  const reviewTop = renderElement({
+    type: 'div',
+    props: { className: 'reviewer-top' }
+  });
 
-  const date = document.createElement('p');
-  date.innerHTML = review.date;
-  date.className = "reviewer-date";
-  reviewTop.appendChild(date);
+  const reviewTopChildren = [
+    {
+      type: 'p',
+      props: {
+        innerHTML: review.name,
+        className: 'reviewer-name'
+      }
+    },
+    {
+      type: 'p',
+      props: {
+        innerHTML: review.date,
+        className: 'reviewer-date'
+      }
+    }
+  ];
+
+  reviewTopChildren.forEach(child => {
+    reviewTop.appendChild(
+      renderElement(child)
+    )
+  });
+
+  const reviewBottom = renderElement({
+    type: 'div',
+    props: { className: 'reviewer-bottom' }
+  });
+
+  const reviewBottomChildren = [
+    {
+      type: 'p',
+      props: {
+        innerHTML: `Rating: ${review.rating}`,
+        className: 'reviewer-rating'
+      }
+    },
+    {
+      type: 'p',
+      props: { innerHTML: review.comments }
+    }
+  ];
+
+  reviewBottomChildren.forEach(child => {
+    reviewBottom.appendChild(
+      renderElement(child)
+    )
+  });
 
   li.appendChild(reviewTop);
-
-  const rating = document.createElement('p');
-  rating.innerHTML = `Rating: ${review.rating}`;
-  rating.className = "reviewer-rating";
-  reviewBottom.appendChild(rating);
-
-  const comments = document.createElement('p');
-  comments.innerHTML = review.comments;
-  reviewBottom.appendChild(comments);
-
-  li.appendChild(reviewBottom);
+  li.appendChild(reviewBottom);  
 
   return li;
 }
@@ -171,7 +219,7 @@ createReviewHTML = (review) => {
 /**
  * Add restaurant name to the breadcrumb navigation menu
  */
-fillBreadcrumb = (restaurant=self.restaurant) => {
+fillBreadcrumb = (restaurant = self.restaurant) => {
   const breadcrumb = document.getElementById('breadcrumb');
   const li = document.createElement('li');
   li.innerHTML = restaurant.name;

@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
   registerServiceWorker();
   fetchNeighborhoods();
   fetchCuisines();
-  if (!navigator.onLine) updateRestaurants();  
+  if (!navigator.onLine) updateRestaurants();
 });
 
 /**
@@ -29,15 +29,29 @@ fetchNeighborhoods = () => {
 }
 
 /**
+ * Renders DOM Element with given properties and attributes
+ */
+function renderElement({ type, props = {}, attributes = {} }) {
+  const element = document.createElement(type);
+  Object.keys(props).forEach(key => element[key] = props[key]);
+  Object.keys(attributes).forEach(key => element.setAttribute(key, attributes[key]));
+  return element;
+}
+
+/**
  * Set neighborhoods HTML.
  */
 fillNeighborhoodsHTML = (neighborhoods = self.neighborhoods) => {
   const select = document.getElementById('neighborhoods-select');
   neighborhoods.forEach(neighborhood => {
-    const option = document.createElement('option');
-    option.setAttribute('role', 'option');
-    option.innerHTML = neighborhood;
-    option.value = neighborhood;
+    const option = renderElement({
+      type: 'option',
+      props: { 
+        innerHTML: neighborhood,
+        value: neighborhood
+      },
+      attributes: { role: 'option' }
+    });
     select.append(option);
   });
 }
@@ -63,10 +77,14 @@ fillCuisinesHTML = (cuisines = self.cuisines) => {
   const select = document.getElementById('cuisines-select');
 
   cuisines.forEach(cuisine => {
-    const option = document.createElement('option');
-    option.setAttribute('role', 'option');
-    option.innerHTML = cuisine;
-    option.value = cuisine;
+    const option = renderElement({
+      type: 'option',
+      props: {
+        innerHTML: cuisine,
+        value: cuisine
+      },
+      attributes: { role: 'option' }
+    });
     select.append(option);
   });
 }
@@ -140,30 +158,44 @@ fillRestaurantsHTML = (restaurants = self.restaurants) => {
  * Create restaurant HTML.
  */
 createRestaurantHTML = (restaurant) => {
-  const li = document.createElement('li');
+  const li = renderElement({ type: 'li' });
 
-  const image = document.createElement('img');
-  image.className = 'restaurant-img';
-  image.src = DBHelper.imageUrlForRestaurant(restaurant);
-  image.alt = DBHelper.imageAltTextForRestaurant(restaurant);
-  li.append(image);
+  const itemChildren = [
+    {
+      type: 'img',
+      props: {
+        className: 'restaurant-img',
+        src: DBHelper.imageUrlForRestaurant(restaurant),
+        alt: DBHelper.imageAltTextForRestaurant(restaurant)
+      }
+    },
+    {
+      type: 'h1',
+      props: { innerHTML: restaurant.name },
+      attributes: { role: 'heading', tabIndex: 0 }
+    },
+    {
+      type: 'p',
+      props: { innerHTML: restaurant.neighborhood }
+    },
+    {
+      type: 'p',
+      props: { innerHTML: restaurant.address }
+    },
+    {
+      type: 'a',
+      props: {
+        innerHTML: 'View Details',
+        href: DBHelper.urlForRestaurant(restaurant)
+      }
+    }
+  ];
 
-  const name = document.createElement('h1');
-  name.innerHTML = restaurant.name;
-  li.append(name);
-
-  const neighborhood = document.createElement('p');
-  neighborhood.innerHTML = restaurant.neighborhood;
-  li.append(neighborhood);
-
-  const address = document.createElement('p');
-  address.innerHTML = restaurant.address;
-  li.append(address);
-
-  const more = document.createElement('a');
-  more.innerHTML = 'View Details';
-  more.href = DBHelper.urlForRestaurant(restaurant);
-  li.append(more)
+  itemChildren.forEach(child => {
+    li.append(
+      renderElement(child)
+    )
+  });
 
   return li
 }
@@ -186,12 +218,16 @@ addMarkersToMap = (restaurants = self.restaurants) => {
  * Register Service Worker
  */
 
-function registerServiceWorker () {
+registerServiceWorker = () => {
   if (!navigator.serviceWorker) return;
 
-  navigator.serviceWorker.register('/sw.js', {scope: '/'}).then(function(reg) {
+  navigator.serviceWorker.register('/sw.js', { scope: '/' }).then(function (reg) {
     console.log('Service worker registration succeeded');
-  }).catch(function(error) {
+  }).catch(function (error) {
     console.log('Service worker registration failed: ' + error);
   })
 }
+
+document.addEventListener('keydown', function (event) {
+  if (event.keyCode === 9) console.log(document.activeElement);
+})
