@@ -107,8 +107,6 @@ fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => 
   const hours = document.getElementById('restaurant-hours');
   for (let key in operatingHours) {
     const row = renderElement({ type: 'tr' })
-    //const row = document.createElement('tr');
-
     const day = renderElement({
       type: 'td',
       props: { innerHTML: key }
@@ -132,7 +130,12 @@ fillReviewsHTML = (reviews = self.restaurant.reviews) => {
   const container = document.getElementById('reviews-container');
   const title = renderElement({
     type: 'h2',
-    props: { innerHTML: 'Reviews' }
+    props: {
+      innerHTML: 'Reviews',
+      tabIndex: 0,
+      id: 'review-list-header'
+    },
+    attributes: { role: 'heading' }
   });
   container.appendChild(title);
 
@@ -155,7 +158,10 @@ fillReviewsHTML = (reviews = self.restaurant.reviews) => {
  * Create review HTML and add it to the webpage.
  */
 createReviewHTML = (review) => {
-  const li = renderElement({ type: 'li' });
+  const li = renderElement({
+    type: 'li',
+    attributes: { role: 'listitem' }
+  });
 
   const reviewTop = renderElement({
     type: 'div',
