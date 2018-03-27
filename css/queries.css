@@ -29,12 +29,7 @@
 }
 
 @media screen and (max-width: 600px) {
-    #restaurants-list li {
-        width: 75%;
-    }
     .filter-options h2 {
-        width: 100%;
-        text-align: center;
         margin-top: 1em;
     }
     .filter-options select {
