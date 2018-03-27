@@ -1,13 +1,13 @@
-const staticCacheName = "restaurant";
-const restaurantPageCache = "restaurant-page";
+const staticCacheName = "restaurant-v1";
 const imageCache = "restaurant-images";
-const allCaches = [staticCacheName, restaurantPageCache ,imageCache];
+const allCaches = [staticCacheName, imageCache];
 
 self.addEventListener('install', function (event) {
     event.waitUntil(
         caches.open(staticCacheName).then(function (cache) {
             return cache.addAll([
                 '/',
+                '/restaurant.html',
                 '/js/main.js',
                 '/js/dbhelper.js',
                 '/js/restaurant_info.js',
@@ -16,8 +16,22 @@ self.addEventListener('install', function (event) {
                 '/css/restaurantQueries.css',
                 '/data/restaurants.json',
             ]);
-        }).catch(function(error){
-            console.log(err)
+        }).catch(function (error) {
+            console.log(error);
+        })
+    );
+});
+
+self.addEventListener('activate', function (event) {
+    event.waitUntil(
+        caches.keys().then(function (cacheNames) {
+            return Promise.all(
+                cacheNames.filter(function (cacheName) {
+                    return !allCaches.includes(cacheName);
+                }).map(function (cacheName) {
+                    return caches.delete(cacheName);
+                })
+            );
         })
     );
 });
@@ -31,7 +45,7 @@ self.addEventListener('fetch', function (event) {
             return;
         }
         if (requestUrl.pathname.startsWith('/restaurant.html')) {
-            event.respondWith(serverFromCache(event.request, restaurantPageCache, {ignoreSearch: true}));
+            event.respondWith(serverFromCache(event.request, staticCacheName, { ignoreSearch: true }));
             return;
         }
     }
