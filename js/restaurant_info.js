@@ -129,7 +129,7 @@ fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => 
 fillReviewsHTML = (reviews = self.restaurant.reviews) => {
   const container = document.getElementById('reviews-container');
   const title = renderElement({
-    type: 'h2',
+    type: 'h3',
     props: {
       innerHTML: 'Reviews',
       tabIndex: 0,

@@ -170,7 +170,7 @@ createRestaurantHTML = (restaurant) => {
       }
     },
     {
-      type: 'h1',
+      type: 'h2',
       props: { innerHTML: restaurant.name },
       attributes: { role: 'heading', tabIndex: 0 }
     },
