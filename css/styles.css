@@ -252,7 +252,7 @@ list-style: none;
   font-size: 12pt;
   font-weight: 300;
   letter-spacing: 10px;
-  margin: 0 0 20px;
+  margin: 0 auto;
   padding: 2px 0;
   text-align: center;
   text-transform: uppercase;
@@ -261,11 +261,12 @@ list-style: none;
 #restaurant-container, #reviews-container {
   border-bottom: 1px solid #d9d9d9;
   border-top: 1px solid #fff;
-  padding: 140px 40px 30px;
+  padding: 140px 0 30px;
   width: 50%;
+  text-align: center;
 }
 #reviews-container {
-  padding: 30px 40px 80px;
+  padding: 30px 0 80px;
 }
 #reviews-container h3 {
   color: #7a4300;
@@ -283,7 +284,7 @@ list-style: none;
     border: 2px solid #f3f3f3;
   display: block;
   list-style-type: none;
-  margin: 0 0 30px;
+  margin: 30px auto;
   overflow: hidden;
   position: relative;
   width: 85%;
@@ -322,6 +323,11 @@ list-style: none;
   padding: 4px 8px;
   font-size: 1.2em;
   font-weight: bold;
+}
+#restaurant-address,
+#restaurant-hours {
+  margin-left: 5%;
+  text-align: left;
 }
 #restaurant-hours td {
   color: #666;

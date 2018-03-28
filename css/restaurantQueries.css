@@ -39,22 +39,10 @@
     #restaurant-container, 
     #reviews-container {
         width: 100%;
-        text-align: center;
     }
 
-    #restaurant-cuisine {
-        margin: auto;
-    }
-
-    #restaurant-address, 
-    #restaurant-hours{
-        margin-left: 5%;
-        text-align: left;
-    }
-
-    #reviews-list li {
-        margin: auto;
-        margin-bottom: 30px;
+    #restaurant-container {
+        padding: 100px 0 30px;
     }
 
 }
